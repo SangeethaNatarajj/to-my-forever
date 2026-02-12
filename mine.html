@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Colleague?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.card {
+    background: white;
+    width: 650px;
+    height: 380px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #ff4d6d;
+    font-size: 26px;
+    margin-bottom: 40px;
+}
+
+button {
+    padding: 8px 22px;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    position: absolute;
+    transition: 0.15s ease;
+}
+
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    left: 50%;
+    top: 210px;
+    transform: translateX(-90px);
+}
+
+#noBtn {
+    background: #bbb;
+    color: black;
+    left: 50%;
+    top: 210px;
+    transform: translateX(30px);
+}
+
+#resultContainer {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+#resultContainer h2 {
+    color: #ff4d6d;
+    margin-bottom: 10px;
+}
+
+.heart-img {
+    font-size: 50px;
+    margin: 10px 0;
+}
+
+.quote {
+    font-size: 15px;
+    color: #555;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+
+    <h1 id="question">💖 Will you be my colleague? 💖</h1>
+
+    <button id="yesBtn">Yes 💕</button>
+    <button id="noBtn">No 😢</button>
+
+   <div id="resultContainer">
+    <h2>💍 Best decision ever! 💍</h2>
+
+    <div class="heart-img">❤️💖❤️</div>
+
+    <div class="quote">
+        My love,<br><br>
+
+        Saying “Yes” to you is not just a choice —  
+        it is the most beautiful decision of my life. ✨  
+
+        You are my best friend, my safe place,  
+        my biggest supporter, and my forever Valentine. 💕  
+
+        Valentine’s Day is not just for lovers —  
+        it is for soulmates, partners, and the person  
+        who makes every ordinary day feel magical.  
+
+        I am so grateful that I get to walk this journey  
+        with you — today, tomorrow, and always. 💍💖  
+
+        Forever yours,  
+        Sangeetha ❤️
+    </div>
+</div>
+
+</div>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const card = document.getElementById("card");
+const question = document.getElementById("question");
+const resultContainer = document.getElementById("resultContainer");
+
+const messages = [
+    "No 😢",
+    "Don't do this 😭",
+    "Feeling bad 💔",
+    "Are you sure? 🥺",
+    "Please click Yes 🙈",
+    "That hurts 😩"
+];
+
+let msgIndex = 0;
+
+card.addEventListener("mousemove", function(e) {
+
+    if (noBtn.style.display === "none") return;
+
+    const noRect = noBtn.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const questionRect = question.getBoundingClientRect();
+
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    const distance = Math.hypot(
+        mouseX - (noRect.left + noRect.width / 2),
+        mouseY - (noRect.top + noRect.height / 2)
+    );
+
+    if (distance < 80) {
+
+        let newX, newY;
+        let overlap;
+
+        // Calculate safe vertical area (below heading)
+        const safeTop =
+            questionRect.bottom - cardRect.top + 20; // 20px gap below text
+
+        do {
+
+            newX = Math.random() * (card.clientWidth - noBtn.offsetWidth - 20);
+
+            newY = safeTop + Math.random() *
+                (card.clientHeight - safeTop - noBtn.offsetHeight - 20);
+
+            const yesRect = yesBtn.getBoundingClientRect();
+            const yesX = yesRect.left - cardRect.left;
+            const yesY = yesRect.top - cardRect.top;
+
+            overlap =
+                (newX < yesX + yesBtn.offsetWidth &&
+                newX + noBtn.offsetWidth > yesX &&
+                newY < yesY + yesBtn.offsetHeight &&
+                newY + noBtn.offsetHeight > yesY);
+
+        } while (overlap);
+
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+        noBtn.style.transform = "none";
+
+        msgIndex = (msgIndex + 1) % messages.length;
+        noBtn.innerText = messages[msgIndex];
+    }
+
+});
+
+yesBtn.addEventListener("click", function() {
+
+    // Hide buttons and question
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    question.style.display = "none";
+
+    // Show centered result
+    resultContainer.style.display = "block";
+});
+
+</script>
+
+</body>
+</html>
